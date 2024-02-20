@@ -106,10 +106,7 @@ const updateVideo = asyncHandler(async (req, res) => {
             throw new Apierror(500, "something went wrong while updating thumbnail on cloudinary !!")
         }
 
-        updateFields.$set = {
-            "thumbnail.public_id": thumbnailUploadOnCloudinary.public_id,
-            "thumbnail.url": thumbnailUploadOnCloudinary.url
-        }
+        updateFields.$set.thumbnail = thumbnailUploadOnCloudinary.url;
     }
 
     const updatedVideoDetails = await Video.findByIdAndUpdate(
@@ -246,7 +243,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
         throw new Apierror(404, "video not found")
     }
 
-    if (video.videoOwner.toString() !== req.user._id.toString()) {
+    if (video.Owner.toString() !== req.user._id.toString()) {
         throw new Apierror(403, "You don't have permission to delete this video!");
     }
 
@@ -294,7 +291,7 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
         throw new Apierror(404, "video not found")
     }
 
-    if (video.videoOwner.toString() !== req.user._id.toString()) {
+    if (video.Owner.toString() !== req.user._id.toString()) {
         throw new Apierror(403, "You don't have permission to toggle this video!")
     }
 
